@@ -20,10 +20,11 @@ jobs:
     - name: Upload Frontend to EC2
       run: |
         scp -i key.pem -o StrictHostKeyChecking=no -r frontend/* ec2-user@${{ secrets.FE_HOST }}:/tmp/
+        scp -i key.pem -o StrictHostKeyChecking=no -r backend/* ec2-user@${{ secrets.FE_HOST }}:/tmp/
         ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.FE_HOST }} "sudo cp -r /tmp/* /var/www/html/ && sudo chown -R apache:apache /var/www/html/"
 
     - name: Upload Backend to Backend EC2 via Frontend EC2
       run: |
         ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.FE_HOST }} "\
-        scp -i ~/ariq_key.pem -o StrictHostKeyChecking=no -r ~/repo/backend ec2-user@${{ secrets.BE_HOST }}:~/ && \
+        scp -i ~/ariq_key.pem -o StrictHostKeyChecking=no -r ~/var/www/html/backend ec2-user@${{ secrets.BE_HOST }}:~/ && \
         ssh -i ~/ariq_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.BE_HOST }} 'cd ~/backend && npm install && (pm2 restart all || pm2 start index.js)'" 
