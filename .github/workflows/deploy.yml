@@ -14,7 +14,7 @@ jobs:
 
     - name: Upload Frontend to EC2
       run: |
-        scp -i ~/ariq_key.pem -o StrictHostKeyChecking=no -r frontend/* ec2-user@${{ secrets.FE_HOST }}:/var/www/html/
+        scp -i ${{ secrets.EC2_KEY }} -o StrictHostKeyChecking=no -r frontend/* ec2-user@${{ secrets.FE_HOST }}:/var/www/html/
 
     - name: Upload Backend to Backend EC2 via Frontend EC2
       run: |
