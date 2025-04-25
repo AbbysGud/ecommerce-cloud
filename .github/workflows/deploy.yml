@@ -12,9 +12,14 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
 
+    - name: Buat file private key dari Secret
+      run: |
+        echo "${{ secrets.EC2_KEY }}" > key.pem
+        chmod 600 key.pem
+
     - name: Upload Frontend to EC2
       run: |
-        scp -i ${{ secrets.EC2_KEY }} -o StrictHostKeyChecking=no -r frontend/* ec2-user@${{ secrets.FE_HOST }}:/var/www/html/
+        scp -i key.pem -o StrictHostKeyChecking=no -r frontend/* ec2-user@${{ secrets.FE_HOST }}:/var/www/html/
 
     - name: Upload Backend to Backend EC2 via Frontend EC2
       run: |
