@@ -6,8 +6,8 @@ const cors = require("cors");
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable CORS for all origins (bisa dibatasi jika mau)
-app.use(express.json()); // Untuk parsing JSON request body
+app.use(cors());
+app.use(express.json());
 
 // Database connection
 const db = mysql.createConnection({

@@ -19,5 +19,5 @@ jobs:
     - name: Upload Backend to Backend EC2 via Frontend EC2
       run: |
         ssh -i ${{ secrets.EC2_KEY }} -o StrictHostKeyChecking=no ec2-user@${{ secrets.FE_HOST }} "\
-        scp -i /home/ec2-user/backend_key.pem -o StrictHostKeyChecking=no -r /var/www/html/backend ec2-user@${{ secrets.BE_HOST }}:/home/ec2-user/ && \
-        ssh -i /home/ec2-user/backend_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.BE_HOST }} 'cd ~/backend && npm install && pm2 restart all || pm2 start index.js'"
+        scp -r -i ~/ariq_key.pem backend ec2-user@${{ secrets.BE_HOST }}:~/ && \
+        ssh -i ~/ariq_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.BE_HOST }} 'cd ~/backend && npm install && pm2 restart all || pm2 start index.js'"
