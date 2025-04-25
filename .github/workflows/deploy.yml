@@ -1,0 +1,23 @@
+name: Deploy App
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Upload Frontend to EC2
+      run: |
+        scp -i ${{ secrets.EC2_KEY }} -o StrictHostKeyChecking=no -r frontend/* ec2-user@${{ secrets.FE_HOST }}:/var/www/html/
+
+    - name: Upload Backend to Backend EC2 via Frontend EC2
+      run: |
+        ssh -i ${{ secrets.EC2_KEY }} -o StrictHostKeyChecking=no ec2-user@${{ secrets.FE_HOST }} "\
+        scp -i /home/ec2-user/backend_key.pem -o StrictHostKeyChecking=no -r /var/www/html/backend ec2-user@${{ secrets.BE_HOST }}:/home/ec2-user/ && \
+        ssh -i /home/ec2-user/backend_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.BE_HOST }} 'cd ~/backend && npm install && pm2 restart all || pm2 start index.js'"

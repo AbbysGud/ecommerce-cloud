@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Produk E-Commerce</title>
+  <style>
+    .produk { margin: 20px; padding: 10px; border: 1px solid #ccc; width: 250px; display: inline-block; vertical-align: top; }
+    img { width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Daftar Produk</h1>
+  <div id="produk-list"></div>
+
+  <script>
+    fetch("http://13.211.11.163:3000/products")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("produk-list");
+        data.forEach(p => {
+          container.innerHTML += `
+            <div class="produk">
+              <img src="${p.image_url}" />
+              <h3>${p.name}</h3>
+              <p>Harga: Rp ${p.price.toLocaleString()}</p>
+            </div>
+          `;
+        });
+      });
+  </script>
+</body>
+</html>
