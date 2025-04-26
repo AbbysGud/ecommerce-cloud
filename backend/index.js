@@ -35,8 +35,11 @@ app.get("/products", (req, res) => {
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Backend jalan di port ${PORT}`);
-});
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Backend jalan di port ${PORT}`);
+  });
+}
+
+module.exports = { app, db };
