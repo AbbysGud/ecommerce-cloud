@@ -19,9 +19,15 @@ jobs:
 
     - name: Upload Frontend to EC2
       run: |
-        scp -i key.pem -o StrictHostKeyChecking=no -r frontend/* ec2-user@${{ secrets.FE_HOST }}:/tmp/
-        scp -i key.pem -o StrictHostKeyChecking=no -r backend/* ec2-user@${{ secrets.FE_HOST }}:/tmp/
-        ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.FE_HOST }} "sudo cp -r /tmp/* /var/www/html/ && sudo chown -R apache:apache /var/www/html/"
+        scp -i key.pem -o StrictHostKeyChecking=no -r frontend ec2-user@${{ secrets.FE_HOST }}:/tmp/
+        scp -i key.pem -o StrictHostKeyChecking=no -r backend ec2-user@${{ secrets.FE_HOST }}:/tmp/
+        ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.FE_HOST }} "\
+          sudo rm -rf /var/www/html/frontend /var/www/html/backend && \
+          sudo cp -r /tmp/frontend /var/www/html/frontend && \
+          sudo cp -r /tmp/backend /var/www/html/backend && \
+          sudo chown -R apache:apache /var/www/html && \
+          sudo chmod -R 755 /var/www/html"
+
 
     - name: Upload Backend to Backend EC2 via Frontend EC2
       run: |
