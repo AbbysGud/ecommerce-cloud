@@ -32,6 +32,5 @@ jobs:
           npm install && \
           scp -i ~/ariq_key.pem -o StrictHostKeyChecking=no -r /var/www/html/backend ec2-user@${{ secrets.BE_HOST }}:~/ && \
           ssh -i ~/ariq_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.BE_HOST }} '\
-            export PATH=$PATH:/home/ec2-user/node_bundle/pm2/bin && \
             cd ~/backend && \
-            pm2 restart all || pm2 start index.js'"
+            node ~/node_bundle/pm2/bin/pm2 restart all || node ~/node_bundle/pm2/bin/pm2 start index.js'"
