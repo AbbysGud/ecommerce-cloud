@@ -31,4 +31,6 @@ jobs:
           cd /var/www/html/backend && \
           npm install && \
           scp -i ~/ariq_key.pem -o StrictHostKeyChecking=no -r /var/www/html/backend ec2-user@${{ secrets.BE_HOST }}:~/ && \
-          ssh -i ~/ariq_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.BE_HOST }} 'cd ~/backend && pm2 restart all || pm2 start index.js'"
+          ssh -i ~/ariq_key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.BE_HOST }} '\
+            cd ~/backend && \
+            nohup node index.js > server.log 2>&1 &'"
